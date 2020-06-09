@@ -12,8 +12,9 @@ public class 二叉树层序遍历 {
     public List<List<Integer>> levelOrder(TreeNode root){
         List<List<Integer>> list = new ArrayList<>();
 
-        if (root == null)
+        if (root == null) {
             return list;
+        }
 
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);

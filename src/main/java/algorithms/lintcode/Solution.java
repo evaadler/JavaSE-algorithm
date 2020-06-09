@@ -1,9 +1,7 @@
 package algorithms.lintcode;
 
-import offer.ListNode;
-import offer.TreeNode;
-import org.omg.CORBA.INTERNAL;
-import util.In;
+import jianzhioffer.ListNode;
+import jianzhioffer.TreeNode;
 
 import java.util.*;
 

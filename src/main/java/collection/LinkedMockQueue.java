@@ -57,7 +57,7 @@ public class LinkedMockQueue {
             rets.add(sum / i);
         }
 
-        rets.removeAll();
+        //rets.removeAll();
         return rets;
     }
 

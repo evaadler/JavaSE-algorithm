@@ -1,4 +1,4 @@
-package offer;
+package jianzhioffer;
 
 /**
  * Created by fifi on 2017/6/7.

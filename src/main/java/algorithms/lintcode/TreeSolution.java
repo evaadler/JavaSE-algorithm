@@ -1,9 +1,7 @@
 package algorithms.lintcode;
 
-import offer.ReadTreeNode;
-import offer.TreeNode;
+import jianzhioffer.TreeNode;
 
-import javax.naming.NameNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

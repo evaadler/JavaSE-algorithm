@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
-public class ThreadTest {
+public class ThreadTest extends Thread{
 
     public static void main(String[] args) throws Exception{
         Long start = System.currentTimeMillis();

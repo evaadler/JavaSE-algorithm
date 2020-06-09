@@ -3,7 +3,7 @@ package datastructure.queue;
 /**
  * Created by fifi on 2017/4/27.
  */
-public class 瘸ueQueue<T>  {
+public class Queue<T>  {
     private T[] queue;
 
     public void enqueue(T s) {

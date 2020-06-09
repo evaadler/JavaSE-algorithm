@@ -1,10 +1,7 @@
-package offer;
+package jianzhioffer;
 
-
-import datastructure.queue.MaxPQ;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by fifi on 2017/6/13.
@@ -21,18 +18,21 @@ public class TreeAlgorithm {
     public int treeDepth(TreeNode root){
         LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
 
-        if (root == null) return 0;
+        if (root == null){ return 0;}
 
         queue.push(root);
 
         int depth = 0, count = 0, nextCount = 1;
         while (queue.size()!=0){
-            TreeNode top = queue.poll();    // remove
+            // remove
+            TreeNode top = queue.poll();
             count++;
-            if (top.left !=null)
+            if (top.left !=null) {
                 queue.push(top.left);
-            if (top.right != null)
+            }
+            if (top.right != null) {
                 queue.push(top.right);
+            }
             if (count == nextCount){
                 nextCount = queue.size();
                 count = 0;
@@ -40,7 +40,6 @@ public class TreeAlgorithm {
             }
         }
         return depth;
-
 
     }
 
@@ -51,8 +50,10 @@ public class TreeAlgorithm {
      * @return
      */
     public int treeDepthReverse(TreeNode root){
-        if (root == null)
+        if (root == null) {
             return 0;
+        }
+        System.out.print(root.val);
         int left = treeDepthReverse(root.left);
         int right = treeDepthReverse(root.right);
         return Math.max(left, right) + 1;
