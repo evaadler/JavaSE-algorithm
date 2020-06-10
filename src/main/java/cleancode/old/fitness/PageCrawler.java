@@ -9,4 +9,8 @@ package cleancode.old.fitness;
  */
 public interface PageCrawler {
     WikiPagePath getFullPath(WikiPage suiteSetup);
+
+    WikiPage getPage(WikiPage root, WikiPagePath path);
+
+    void setDeadEndStrategy(VirtualEnabledPageCrawler virtualEnabledPageCrawler);
 }

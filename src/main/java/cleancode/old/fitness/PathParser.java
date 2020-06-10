@@ -11,4 +11,8 @@ public class PathParser {
     public static String render(WikiPagePath pagePath) {
         return null;
     }
+
+    public static WikiPagePath parse(String resource) {
+        return null;
+    }
 }

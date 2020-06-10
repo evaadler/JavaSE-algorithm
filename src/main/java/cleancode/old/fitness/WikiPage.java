@@ -15,4 +15,8 @@ public class WikiPage {
     public WikiPage getFullPath(WikiPage wiki) {
         return null;
     }
+
+    public PageData getData() {
+        return null;
+    }
 }
