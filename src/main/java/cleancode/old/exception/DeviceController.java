@@ -2,6 +2,7 @@ package cleancode.old.exception;
 
 import com.sun.media.jfxmedia.logging.Logger;
 import ningM.com.adobe.service.Deduplication;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 import java.awt.image.PixelGrabber;
@@ -9,9 +10,8 @@ import java.awt.image.PixelGrabber;
 
 /**
  * DeviceController
- * 使用异常而非返回码
- * 问题：搞乱了调用者代码。调用者必须在调用之后即刻检查错误
- * 好的做法是遇到错误时，最好抛出一个异常
+ * 使用异常而非返回码（重构后）
+ * 之前纠结的两个元素：【设备关闭算法】和【错误处理】现在被隔离了
  *
  * @author Alicia
  * @description
@@ -24,22 +24,26 @@ public class DeviceController {
     private PixelGrabber record;
 
     public void sendShutDown() {
-        DeviceHandle handle = getHandle(DEV1);
-        // check the state of the device
-        if (handle != DeviceHandle.INVALID) {
-            // save the device status to the record field
-            retrieveDeviceRecord(handle);
-            // if not suspended, shut down
-            if (record.getStatus() != DEVICE_SUSPENDED) {
-                pauseDevice(handle);
-                clearDeviceWorkQueue(handle);
-                closeDevice(handle);
-            } else {
-                logger.info("Device suspended. Unable to shutdown");
-            }
-        }else {
-            logger.info("Invalid handle for: " + DEV1.toString());
+        try {
+            tryToShutDown();
+        } catch (DeviceShutDownError e) {
+            logger.info(e);
         }
+    }
+
+    private void tryToShutDown() throws DeviceShutDownError{
+        DeviceHandle handle = getHandle(DEV1);
+        DeviceRecord record = retrieveDeviceRecord(handle);
+
+        pauseDevice(handle);
+        clearDeviceWorkQueue(handle);
+        closeDevice(handle);
+    }
+
+    private DeviceHandle getHandle(DeviceID id) {
+
+        // throw new DeviceShutDownError("Invalid handle for: " + id.toString());
+        return null;
     }
 
     private DeviceHandle getHandle(Object obj) {
@@ -52,5 +56,5 @@ public class DeviceController {
 
     private void pauseDevice(DeviceHandle handle) { }
 
-    private void retrieveDeviceRecord(DeviceHandle handle) { }
+    private DeviceRecord retrieveDeviceRecord(DeviceHandle handle) { return null;}
 }
