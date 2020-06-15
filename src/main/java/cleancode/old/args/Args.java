@@ -2,6 +2,7 @@ package cleancode.old.args;
 
 import sun.util.locale.ParseStatus;
 
+
 import java.text.ParseException;
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class Args {
     private String[] args;
     private boolean valid;
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
-    private Map<Character, Boolean> booleanArgs = new HashMap<Character, Boolean>();
+    private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
 
     private Map<Character, String> stringArgs = new HashMap<Character, String>();
     private Set<Character> argsFound = new HashSet<>();
@@ -88,7 +89,7 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
-        booleanArgs.put(elementId, false);
+        booleanArgs.put(elementId, new BooleanArgumentMarshaler());
     }
 
     private boolean parseArguments() {
@@ -151,7 +152,8 @@ public class Args {
 
 
     private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.put(argChar, value);
+        //booleanArgs.put(argChar, value);
+        booleanArgs.get(argChar).setBoolean(value);
     }
 
     private boolean isBoolean(char argChar) {
@@ -195,11 +197,8 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        return booleanArgs.get(arg);
-    }
-
-    private boolean falseIfNull(Boolean b) {
-        return b == null ? false : b;
+        Args.ArgumentMarshaler am  = booleanArgs.get(arg);
+        return am!=null && am.getBoolean();
     }
 
     public String getString(char arg){
@@ -216,6 +215,25 @@ public class Args {
 
     public boolean isValid() {
         return valid;
+    }
+
+    /**
+     * 许多不同类型，类似的方法
+     */
+    private class ArgumentMarshaler {
+        private boolean booleanValue = false;
+
+        public void setBoolean(boolean value) {
+            booleanValue = value;
+        }
+
+        public boolean getBoolean() {return booleanValue;}
+
+        class BooleanArgumentMarshaler extends ArgumentMarshaler{}
+
+        private class StringArgumentMarshaler extends ArgumentMarshaler{}
+
+        private class IntegerArgumentMarshaler extends ArgumentMarshaler{}
     }
 
 }
