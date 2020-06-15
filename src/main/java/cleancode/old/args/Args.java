@@ -20,7 +20,7 @@ public class Args {
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
 
-    private Map<Character, String> stringArgs = new HashMap<Character, String>();
+    private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
     private Set<Character> argsFound = new HashSet<>();
     private int currentArgument;
     private char errorArgument = '\0';
@@ -77,7 +77,7 @@ public class Args {
     }
 
     private void parseStringSchemaElement(char elementId) {
-        stringArgs.put(elementId, "");
+        stringArgs.put(elementId, new StringArgumentMarshaler());
     }
 
     private boolean isStringSchemaElement(String elementTail) {
@@ -112,7 +112,7 @@ public class Args {
         }
     }
 
-    private void parseElement(char argChar) {
+    private void parseElement(char argChar) throws ArgsException{
         if (setArgument(argChar)) {
             argsFound.add(argChar);
         } else {
@@ -121,7 +121,7 @@ public class Args {
         }
     }
 
-    private boolean setArgument(char argChar) {
+    private boolean setArgument(char argChar) throws ArgsException {
         boolean set = true;
         if (isBoolean(argChar)){
             setBooleanArg(argChar, true);
@@ -133,14 +133,15 @@ public class Args {
         return set;
     }
 
-    private void setStringArg(char argChar, String s) {
+    private void setStringArg(char argChar, String s) throws ArgsException{
         currentArgument ++;
         try {
-            stringArgs.put(argChar, args[currentArgument]);
+            stringArgs.get(argChar).setString(args[currentArgument]);
         }catch (ArrayIndexOutOfBoundsException e) {
             valid = false;
             errorArgument = argChar;
             errorCode = ErrorCode.MISSING_STRING;
+            throw new ArgsException();
         }
 
     }
@@ -202,7 +203,8 @@ public class Args {
     }
 
     public String getString(char arg){
-        return blankIfNull(stringArgs.get(arg));
+        Args.ArgumentMarshaler am = stringArgs.get(args);
+        return am == null ? "" : am.getString();
     }
 
     private String blankIfNull(String s) {
@@ -222,12 +224,21 @@ public class Args {
      */
     private class ArgumentMarshaler {
         private boolean booleanValue = false;
+        private String stringValue;
 
         public void setBoolean(boolean value) {
             booleanValue = value;
         }
 
         public boolean getBoolean() {return booleanValue;}
+
+        public String getString() {
+            return stringValue == null ? "" : stringValue;
+        }
+
+        public void setString(String stringValue) {
+            this.stringValue = stringValue;
+        }
 
         class BooleanArgumentMarshaler extends ArgumentMarshaler{}
 
@@ -237,3 +248,5 @@ public class Args {
     }
 
 }
+
+
