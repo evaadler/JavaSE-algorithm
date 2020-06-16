@@ -1,5 +1,6 @@
 package cleancode.old.args;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
 import sun.util.locale.ParseStatus;
 
 
@@ -34,14 +35,14 @@ public class Args {
 
     private ErrorCode errorCode = ErrorCode.OK;
 
-    public Args(String schema, String[] args) throws ParseException{
+    public Args(String schema, String[] args) throws ParseException, ArgsException{
         this.schema = schema;
         this.args = args;
         valid = parse();
     }
 
 
-    private boolean parse() throws ParseException{
+    private boolean parse() throws ArgsException, ParseException{
         if (schema.length() == 0 && args.length == 0) {
             return true;
         }
@@ -99,7 +100,7 @@ public class Args {
         intArgs.put(elementId, new IntegerArgumentMarshaler());
     }
 
-    private boolean parseArguments() {
+    private boolean parseArguments() throws ArgsException{
         for (currentArgument = 0; currentArgument < args.length; currentArgument++) {
             String arg = args[currentArgument];
             parseArgument(arg);
@@ -107,13 +108,13 @@ public class Args {
         return true;
     }
 
-    private void parseArgument(String arg) {
+    private void parseArgument(String arg) throws ArgsException{
         if (arg.startsWith("-")) {
             parseElements(arg);
         }
     }
 
-    private void parseElements(String arg) {
+    private void parseElements(String arg) throws ArgsException{
         for (int i = 1; i < arg.length(); i++) {
             parseElement(arg.charAt(i));
         }
@@ -156,10 +157,8 @@ public class Args {
         return stringArgs.containsKey(argChar);
     }
 
-
-
     private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.get(argChar).setBoolean(value);
+        booleanArgs.get(argChar).set("true");
     }
 
     private boolean isBoolean(char argChar) {
@@ -223,7 +222,7 @@ public class Args {
 
     public boolean getBoolean(char arg) {
         Args.ArgumentMarshaler am  = booleanArgs.get(arg);
-        return am!=null && am.getBoolean();
+        return am!=null && (boolean) am.get();
     }
 
     public String getString(char arg){
@@ -232,7 +231,7 @@ public class Args {
     }
 
     public int getInt(char arg){
-        return Args.ArgumentMarshaler am = intArgs.get(arg);
+         Args.ArgumentMarshaler am = intArgs.get(arg);
         return am == null ? 0 : am.getInteger();
     }
 
@@ -251,16 +250,10 @@ public class Args {
     /**
      * 许多不同类型，类似的方法
      */
-    private class ArgumentMarshaler {
-        private boolean booleanValue = false;
+    private abstract class ArgumentMarshaler {
+
         private String stringValue;
         private int integerValue;
-
-        public void setBoolean(boolean value) {
-            booleanValue = value;
-        }
-
-        public boolean getBoolean() {return booleanValue;}
 
         public String getString() {
             return stringValue == null ? "" : stringValue;
@@ -278,7 +271,20 @@ public class Args {
             return integerValue;
         }
 
-        class BooleanArgumentMarshaler extends ArgumentMarshaler{}
+        public abstract void set(String s);
+
+        public abstract Object get();
+
+        private class BooleanArgumentMarshaler extends ArgumentMarshaler{
+            private boolean booleanValue = false;
+
+            @Override
+            public void set(String s) {
+                booleanValue = true;
+            }
+            @Override
+            public Object get() {return booleanValue;}
+        }
 
         private class StringArgumentMarshaler extends ArgumentMarshaler{}
 
