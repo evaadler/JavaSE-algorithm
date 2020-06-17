@@ -1,6 +1,7 @@
 package cleancode.old.args;
 
 import com.sun.javafx.image.impl.IntArgb;
+import com.sun.org.apache.xpath.internal.Arg;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import sun.util.locale.ParseStatus;
 
@@ -17,7 +18,6 @@ import java.util.*;
  */
 public class Args {
     private String schema;
-    //private String[] args;
     private boolean valid;
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
     private Set<Character> argsFound = new HashSet<>();
@@ -25,12 +25,10 @@ public class Args {
     private char errorArgumentId = '\0';
     private String errorParameter = "TILT";
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
-    private ErrorCode errorCode = ErrorCode.OK;
+    private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
     private List<String> argsList;
 
-    enum ErrorCode {
-        OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT, MISSING_DOUBLE, INVALID_DOUBLE,
-    }
+
 
     public Args(String schema, String[] args) throws ParseException, ArgsException{
         this.schema = schema;
@@ -44,11 +42,16 @@ public class Args {
             return true;
         }
         parseSchema();
-        parseArguments();
+        try {
+            parseArguments();
+        } catch (ArgsException e){
+
+        }
+
         return valid;
     }
 
-    private boolean parseSchema() throws ParseException{
+    private boolean parseSchema() throws ArgsException{
         for (String element : schema.split(",")) {
             if (element.length() > 0) {
                 String trimmedElement = element.trim();
@@ -58,7 +61,7 @@ public class Args {
         return true;
     }
 
-    private void parseSchemaElement(String element) throws ParseException{
+    private void parseSchemaElement(String element) throws ArgsException{
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
@@ -72,15 +75,15 @@ public class Args {
         } else if (elementTail.equals("##")){
             marshalers.put(elementId, new DoubleArgumentMarshaler());
         }else {
-            throw new ParseException(String.format("Argument: %c" +
-                    " has invalid format: %s.",elementId, elementTail), 0);
+            throw new ArgsException(String.format("Argument: %c" +
+                    " has invalid format: %s.",elementId, elementTail));
         }
     }
 
-    private void validateSchemaElementId(char elementId) throws ParseException {
+    private void validateSchemaElementId(char elementId) throws ArgsException {
         if (!Character.isLetter(elementId)) {
             // boi中抛异常抽取那块可以参考这里
-            throw new ParseException("Bad character:" + elementId + "in Args format " + schema, 0);
+            throw new ArgsException("Bad character:" + elementId + "in Args format " + schema);
         }
     }
 
@@ -128,7 +131,7 @@ public class Args {
             argsFound.add(argChar);
         } else {
             unexpectedArguments.add(argChar);
-            errorCode = ErrorCode.UNEXPECTED_ARGUMENT;
+            errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
             valid = false;
         }
     }
@@ -147,34 +150,6 @@ public class Args {
             throw e;
         }
 
-    }
-
-    private void setStringArg(ArgumentMarshaler m) throws ArgsException{
-
-        try {
-            m.set(currentArgument.next());
-        }catch (NoSuchElementException e) {
-            errorCode = ErrorCode.MISSING_STRING;
-            throw new ArgsException();
-        }
-    }
-
-    private void setBooleanArg(ArgumentMarshaler m, Iterator<String> currentArgument) throws ArgsException {
-            m.set("true");
-    }
-
-    private void setIntArg(ArgumentMarshaler m) throws ArgsException{
-        String parameter = null;
-        try {
-            parameter = currentArgument.next();
-            m.set(parameter);
-        } catch (NoSuchElementException e) {
-            errorCode = ErrorCode.MISSING_INTEGER;
-            throw new ArgsException();
-        } catch (ArgsException e) {
-            errorCode = ErrorCode.INVALID_INTEGER;
-            throw e;
-        }
     }
 
     public int cardinality() {
@@ -295,15 +270,10 @@ public class Args {
             try {
                 stringValue = currentArgument.next();
             }catch (NoSuchElementException e) {
-                errorCode = ErrorCode.MISSING_STRING;
+                errorCode = ArgsException.ErrorCode.MISSING_STRING;
                 throw new ArgsException();
             }
         }
-
-//        @Override
-//        public void set(String s) {
-//
-//        }
 
         @Override
         public Object get() {
@@ -320,26 +290,16 @@ public class Args {
             String parameter = null;
             try {
                 parameter = currentArgument.next();
-                //set(parameter);
                 integerValue = Integer.parseInt(parameter);
             }catch (NoSuchElementException e){
-                errorCode = ErrorCode.MISSING_INTEGER;
+                errorCode = ArgsException.ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();
             }catch (NumberFormatException e) {
                 errorParameter = parameter;
-                errorCode = ErrorCode.INVALID_INTEGER;
-                throw e;
+                errorCode = ArgsException.ErrorCode.INVALID_INTEGER;
+                throw new ArgsException();
             }
         }
-
-//        @Override
-//        public void set(String s) throws ArgsException{
-//            try {
-//                integerValue = Integer.parseInt(s);
-//            } catch (NumberFormatException e){
-//                throw new ArgsException();
-//            }
-//        }
 
         @Override
         public Object get() {
@@ -356,11 +316,11 @@ public class Args {
                 parameter = currentArgument.next();
                 doubleValue = Double.parseDouble(parameter);
             } catch (NoSuchElementException e){
-                errorCode = ErrorCode.MISSING_DOUBLE;
+                errorCode = ArgsException.ErrorCode.MISSING_DOUBLE;
                 throw new ArgsException();
             } catch (NumberFormatException e){
                 errorParameter = parameter;
-                errorCode = ErrorCode.INVALID_DOUBLE;
+                errorCode = ArgsException.ErrorCode.INVALID_DOUBLE;
                 throw new ArgsException();
             }
         }
@@ -378,8 +338,6 @@ public class Args {
     private interface ArgumentMarshaler {
 
         public abstract void set(Iterator<String> currentArgument) throws ArgsException;
-
-        //public abstract void set(String s) throws ArgsException;
 
         public abstract Object get();
     }
