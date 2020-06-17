@@ -1,5 +1,6 @@
 package cleancode.old.junitcase;
 
+import jdk.packager.services.userjvmoptions.PreferencesUserJvmOptions;
 import junit.framework.Assert;
 
 /**
@@ -19,19 +20,26 @@ public class ComparisonCompactor {
     private String actual;
     private int prefix;
     private int suffix;
+    private String compactActual;
+    private String compactExpected;
+    private int prefixIndex;
+    private int suffixIndex;
 
     public ComparisonCompactor(int contextLength, String expected, String actual) {
     }
 
-    public String compact(String message) {
+    public String formatCompactedComparison(String message) {
         if (canBeCompact()){
             return Assert.format(message, expected, actual);
         }
-        findCommonPrefix();
-        findCommonSuffix();
-        String compactExpected = compactString(expected);
-        String compactActual = compactString(actual);
         return Assert.format(compactActual, compactExpected, actual);
+    }
+
+    private void compactExpectedAndActual() {
+        prefixIndex = findCommonPrefix();
+        suffixIndex = findCommonSuffix();
+        compactExpected = compactString(expected);
+        compactActual = compactString(actual);
     }
 
     private boolean canBeCompact() {
@@ -50,25 +58,26 @@ public class ComparisonCompactor {
         return result;
     }
 
-    private void findCommonPrefix() {
-        prefix = 0;
+    private int findCommonPrefix() {
+        int prefixIndex = 0;
         int end = Math.min(expected.length(), actual.length());
-        for (; prefix < end; prefix++) {
-            if (expected.charAt(prefix) != actual.charAt(prefix)){
+        for (; prefixIndex < end; prefixIndex++) {
+            if (expected.charAt(prefixIndex) != actual.charAt(prefixIndex)){
                 break;
             }
         }
+        return prefixIndex;
     }
 
-    private void findCommonSuffix() {
+    private int findCommonSuffix() {
         int expectedSuffix = expected.length() - 1;
         int actualSuffix = actual.length() -1;
-        for (; actualSuffix >= prefix && expectedSuffix >= prefix; actualSuffix--,expectedSuffix--){
+        for (; actualSuffix >= prefixIndex && expectedSuffix >= prefix; actualSuffix--,expectedSuffix--){
             if (expected.charAt(expectedSuffix) != actual.charAt(actualSuffix)){
                 break;
             }
         }
-        suffix = expected.length() - expectedSuffix;
+        return expected.length() - expectedSuffix;
     }
 
     private String computeCommonPrefix() {
