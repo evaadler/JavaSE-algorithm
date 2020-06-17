@@ -25,7 +25,7 @@ public class Args {
     private char errorArgumentId = '\0';
     private String errorParameter = "TILT";
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
-    private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
+   // private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
     private List<String> argsList;
 
 
@@ -131,7 +131,7 @@ public class Args {
             argsFound.add(argChar);
         } else {
             unexpectedArguments.add(argChar);
-            errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
+            //errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
             valid = false;
         }
     }
@@ -164,25 +164,7 @@ public class Args {
         }
     }
 
-    public String errorMessage() throws Exception{
-        if (unexpectedArguments.size() > 0) {
-            return unexpectArgumentMessage();
-        } else {
-            switch (errorCode) {
-                case MISSING_STRING:
-                    return String.format("Could not find string parameter for -%c.", errorArgumentId);
-                case OK:
-                    throw new Exception("TILT: Should not get here.");
-                case UNEXPECTED_ARGUMENT:
-                    return unexpectArgumentMessage();
-                case INVALID_INTEGER:
-                    return String.format("Argument -c% expects an integer but was '%s'.", errorArgumentId, errorParameter);
-                case MISSING_INTEGER:
-                    return String.format("Could not find integer parameter for -%c.", errorArgumentId);
-            }
-            return "";
-        }
-    }
+
 
     private String unexpectArgumentMessage() {
         StringBuffer message = new StringBuffer("Argument(s) -");
@@ -194,7 +176,7 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        Args.ArgumentMarshaler am  = marshalers.get(arg);
+        ArgumentMarshaler am  = marshalers.get(arg);
         boolean b = false;
         try {
             b = am!=null && (boolean) am.get();
@@ -205,7 +187,7 @@ public class Args {
     }
 
     public String getString(char arg){
-        Args.ArgumentMarshaler am = marshalers.get(arg);
+        ArgumentMarshaler am = marshalers.get(arg);
 
         try {
             return am == null ? "" : (String)am.get();
@@ -215,7 +197,7 @@ public class Args {
     }
 
     public int getInt(char arg){
-         Args.ArgumentMarshaler am = marshalers.get(arg);
+         ArgumentMarshaler am = marshalers.get(arg);
          try {
              return am == null ? 0 : (Integer)am.get();
          }catch (ClassCastException e) {
@@ -225,7 +207,7 @@ public class Args {
     }
 
     public double getDouble(char arg) {
-        Args.ArgumentMarshaler am = marshalers.get(arg);
+        ArgumentMarshaler am = marshalers.get(arg);
         try {
             return am == null ? 0 : (Double)am.get();
         }catch (Exception e){
@@ -245,103 +227,6 @@ public class Args {
     public boolean isValid() {
         return valid;
     }
-
-    private class BooleanArgumentMarshaler implements ArgumentMarshaler{
-        private boolean booleanValue = false;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            booleanValue = true;
-        }
-
-//        @Override
-//        public void set(String s) {
-//            //booleanValue = true;
-//        }
-        @Override
-        public Object get() {return booleanValue;}
-    }
-
-    private class StringArgumentMarshaler implements ArgumentMarshaler{
-        private String stringValue;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            try {
-                stringValue = currentArgument.next();
-            }catch (NoSuchElementException e) {
-                errorCode = ArgsException.ErrorCode.MISSING_STRING;
-                throw new ArgsException();
-            }
-        }
-
-        @Override
-        public Object get() {
-            return stringValue;
-        }
-    }
-
-
-    private class IntegerArgumentMarshaler implements ArgumentMarshaler{
-        private int integerValue = 0;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            String parameter = null;
-            try {
-                parameter = currentArgument.next();
-                integerValue = Integer.parseInt(parameter);
-            }catch (NoSuchElementException e){
-                errorCode = ArgsException.ErrorCode.MISSING_INTEGER;
-                throw new ArgsException();
-            }catch (NumberFormatException e) {
-                errorParameter = parameter;
-                errorCode = ArgsException.ErrorCode.INVALID_INTEGER;
-                throw new ArgsException();
-            }
-        }
-
-        @Override
-        public Object get() {
-            return integerValue;
-        }
-    }
-
-    private class DoubleArgumentMarshaler implements ArgumentMarshaler{
-        private double doubleValue = 0;
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            String parameter = null;
-            try {
-                parameter = currentArgument.next();
-                doubleValue = Double.parseDouble(parameter);
-            } catch (NoSuchElementException e){
-                errorCode = ArgsException.ErrorCode.MISSING_DOUBLE;
-                throw new ArgsException();
-            } catch (NumberFormatException e){
-                errorParameter = parameter;
-                errorCode = ArgsException.ErrorCode.INVALID_DOUBLE;
-                throw new ArgsException();
-            }
-        }
-
-
-        @Override
-        public Object get() {
-            return null;
-        }
-    }
-
-    /**
-     * 许多不同类型，类似的方法
-     */
-    private interface ArgumentMarshaler {
-
-        public abstract void set(Iterator<String> currentArgument) throws ArgsException;
-
-        public abstract Object get();
-    }
-
 }
 
 
