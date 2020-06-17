@@ -18,14 +18,9 @@ import java.util.*;
  */
 public class Args {
     private String schema;
-    private boolean valid;
-    private Set<Character> unexpectedArguments = new TreeSet<Character>();
     private Set<Character> argsFound = new HashSet<>();
     private Iterator<String> currentArgument;
-    private char errorArgumentId = '\0';
-    private String errorParameter = "TILT";
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
-   // private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
     private List<String> argsList;
 
 
@@ -33,22 +28,13 @@ public class Args {
     public Args(String schema, String[] args) throws ParseException, ArgsException{
         this.schema = schema;
         this.argsList = Arrays.asList(args);
-        valid = parse();
+        parse();
     }
 
 
-    private boolean parse() throws ArgsException, ParseException{
-        if (schema.length() == 0 && argsList.size() == 0) {
-            return true;
-        }
+    private void parse() throws ArgsException, ParseException{
         parseSchema();
-        try {
-            parseArguments();
-        } catch (ArgsException e){
-
-        }
-
-        return valid;
+        parseArguments();
     }
 
     private boolean parseSchema() throws ArgsException{
@@ -75,36 +61,16 @@ public class Args {
         } else if (elementTail.equals("##")){
             marshalers.put(elementId, new DoubleArgumentMarshaler());
         }else {
-            throw new ArgsException(String.format("Argument: %c" +
-                    " has invalid format: %s.",elementId, elementTail));
+            throw new ArgsException(ErrorCode.INVALID_FORMAT,elementId, elementTail);
         }
     }
 
     private void validateSchemaElementId(char elementId) throws ArgsException {
         if (!Character.isLetter(elementId)) {
             // boi中抛异常抽取那块可以参考这里
-            throw new ArgsException("Bad character:" + elementId + "in Args format " + schema);
+            throw new ArgsException(ErrorCode.INVALID_ARGUMENT_NAMW, schema);
         }
     }
-
-    private void parseStringSchemaElement(char elementId) {
-        ArgumentMarshaler m = new StringArgumentMarshaler();
-        //stringArgs.put(elementId, m);
-        marshalers.put(elementId, m);
-    }
-
-    private boolean isStringSchemaElement(String elementTail) {
-        return elementTail.equals("*");
-    }
-
-    private boolean isBooleanSchemaElement(String elementTail) {
-        return elementTail.length() == 0;
-    }
-
-    private boolean isIntegerSchemaElement(String elementTail) {
-        return elementTail.equals("#");
-    }
-
 
     private boolean parseArguments() throws ArgsException{
         for (currentArgument = argsList.iterator(); currentArgument.hasNext(); ) {
@@ -130,9 +96,8 @@ public class Args {
         if (setArgument(argChar)) {
             argsFound.add(argChar);
         } else {
-            unexpectedArguments.add(argChar);
-            //errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
-            valid = false;
+            //unexpectedArguments.add(argChar);
+            throw new ArgsException(ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
         }
     }
 
@@ -145,8 +110,7 @@ public class Args {
             m.set(currentArgument);
             return true;
         } catch (ArgsException e) {
-            valid = false;
-            errorArgumentId = argChar;
+            e.setErrorArgumentId(argChar);
             throw e;
         }
 
@@ -162,17 +126,6 @@ public class Args {
         } else {
             return "";
         }
-    }
-
-
-
-    private String unexpectArgumentMessage() {
-        StringBuffer message = new StringBuffer("Argument(s) -");
-        for (char c : unexpectedArguments) {
-            message.append(c);
-        }
-        message.append(" unexpected");
-        return message.toString();
     }
 
     public boolean getBoolean(char arg) {
@@ -222,10 +175,6 @@ public class Args {
 
     public boolean has(char arg){
         return argsFound.contains(arg);
-    }
-
-    public boolean isValid() {
-        return valid;
     }
 }
 
