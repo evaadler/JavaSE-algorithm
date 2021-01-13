@@ -25,6 +25,8 @@ class GraphicEditor{
             drawRectangle(s);
         }else if (s.type == 2){
             drawCircle(s);
+        }else if (s.type == 3){
+            drawTangle(s);
         }
 
     }
@@ -35,6 +37,10 @@ class GraphicEditor{
 
     public void drawCircle(Shape r){
         System.out.println("圆形");
+    }
+
+    public void drawTangle(Shape r){
+        System.out.println("三角形");
     }
 }
 
@@ -51,5 +57,11 @@ class Rectangle extends Shape{
 class Circle extends  Shape{
     Circle(){
         type = 2;
+    }
+}
+
+class Trangle extends Shape{
+    Trangle(){
+        type = 3;
     }
 }
