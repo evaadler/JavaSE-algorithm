@@ -1,5 +1,6 @@
 package designpattern.factory.simplefactory.pizzastore.order;
 
+import com.apple.laf.AquaGroupBorder;
 import designpattern.factory.simplefactory.pizzastore.pizza.CheesePizza;
 import designpattern.factory.simplefactory.pizzastore.pizza.GreekPizza;
 import designpattern.factory.simplefactory.pizzastore.pizza.Pizza;
@@ -17,25 +18,32 @@ import java.io.InputStreamReader;
  */
 public class OrderPizza {
 
-    public OrderPizza(){
-        Pizza pizza = null;
-        String orderType;
-        System.out.println("input pizza 种类：");
+    public OrderPizza(SimpleFactory factory){
+        setFactory(factory);
+    }
+
+    SimpleFactory simpleFactory = null;
+    Pizza pizza = null;
+
+    public void setFactory(SimpleFactory factory){
+        String orderType = "";
+        this.simpleFactory = factory;
+
         do {
+            System.out.println("披萨种类：");
             orderType = getType();
-            if (orderType.equalsIgnoreCase("cheese")){
-                pizza = new CheesePizza();
-                pizza.setName("奶酪披萨");
-            }else if(orderType.equalsIgnoreCase("greek")){
-                pizza = new GreekPizza();
-                pizza.setName("希腊披萨");
-            }else{
-                break;
-            }
-            pizza.prepare();
+            pizza = factory.createPizza(orderType);
+
+            if (pizza!=null){
+                pizza.prepare();
             pizza.bake();
             pizza.cut();
             pizza.box();
+
+            }else {
+                System.out.println("披萨订购失败");
+                break;
+            }
         }while (true);
     }
 
