@@ -1,6 +1,4 @@
-package designpattern.prototype;
-
-import java.io.Closeable;
+package designpattern.prototype.improve;
 
 /**
  * Sheep
@@ -13,7 +11,7 @@ public class Sheep implements Cloneable{
     private String name;
     private int age;
     private String color;
-    public Sheep(String name, int age ){
+    public Sheep(String name, int age, String color ){
         super();
         this.name = name;
         this.age = age;
