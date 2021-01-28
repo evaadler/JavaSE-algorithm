@@ -33,6 +33,6 @@ public class Client {
         System.out.println("-----按下撤销按钮------");
         remoteController.undoButtonWasPushed();
 
-        System.out.println("使用遥控器操作电视机");
+        //System.out.println("使用遥控器操作电视机");
     }
 }
