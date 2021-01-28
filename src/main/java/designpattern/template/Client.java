@@ -16,5 +16,9 @@ public class Client {
         System.out.println("---制作花生豆浆---");
         SoyaMilk peanutMilk = new PeanutSoyaMilk();
         redMilk.make();
+
+        System.out.println("---制作纯豆浆---");
+        SoyaMilk pureMilk = new PureSoyaMilk();
+        pureMilk.make();
     }
 }
