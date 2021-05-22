@@ -47,7 +47,7 @@ public class ST<Key extends Comparable<Key>, Value> {
     }
 
     /**
-     * search: logN
+     * datastructure.search: logN
      * insert: N    avg-case: N / 2
      * ordered iteration: yes
      * key interface: compareTo()

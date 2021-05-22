@@ -1,6 +1,5 @@
 package cleancode.old.fitness;
 
-import jianzhioffer.ReadTreeNode;
 
 /**
  * PageData

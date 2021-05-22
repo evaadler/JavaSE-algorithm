@@ -43,7 +43,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Node delete(Node x, Key key) {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
-        if (cmp < 0) x.left = delete(x.left, key);                  // search for key
+        if (cmp < 0) x.left = delete(x.left, key);                  // datastructure.search for key
         else if (cmp > 0) x.right = delete(x.right, key);
         else {
             if (x.right == null) return x.left;                     // no right child

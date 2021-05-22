@@ -17,5 +17,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-source 7" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Canada" options="" />
+      <module name="JavaSE" options="" />
+    </option>
   </component>
 </project>
