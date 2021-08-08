@@ -8,7 +8,7 @@ package designpattern.responsibilitychain;
  * @date 2021/4/11
  */
 public abstract class Approver {
-    Java
+
     Approver approver;
     String name;
 

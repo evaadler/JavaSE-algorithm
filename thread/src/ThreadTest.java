@@ -13,13 +13,13 @@ public class ThreadTest extends Thread{
         final List<Integer> list = new ArrayList<>();
 
         for (int i=0; i<1000; i++){
-            ExecutorService executorService;  // 线程池
-
-            thread.start();
-            thread.join();
-
-            executorService.shutdown();
-            executorService.awaitTermination();// 等待子线程运行完毕再运行主线程
+//            ExecutorService executorService=null;  // 线程池
+//
+//            thread.start();
+//            thread.join();
+//
+//            executorService.shutdown();
+//            executorService.awaitTermination();// 等待子线程运行完毕再运行主线程
         }
 
 

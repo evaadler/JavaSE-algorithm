@@ -1,6 +1,5 @@
 package designpattern.demeter;
 
-import java8.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
