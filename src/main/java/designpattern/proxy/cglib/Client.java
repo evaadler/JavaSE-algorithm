@@ -13,7 +13,7 @@ public class Client {
 
     public static void main(String[] args) {
         TeacherDao teacherDao = new TeacherDao();
-        TeacherDao teacherDao1 = (TeacherDao) new ProxyFactory(teacherDao).getProxyInstance();
-        teacherDao1.teach();
+//        TeacherDao teacherDao1 = (TeacherDao) new ProxyFactory(teacherDao).getProxyInstance();
+//        teacherDao1.teach();
     }
 }
