@@ -38,6 +38,7 @@ public class PromotionFactory {
         }else if(supportPromotions.getPromotionType() == PromotionType.REDPACKED){
             baseCount = new RedPacketDecorator(baseCount);
         }
+        return baseCount;
     }
 
     public static void main(String[] args) {
@@ -49,6 +50,9 @@ public class PromotionFactory {
             orderDetail.setPayMoney(payMoney);
             System.out.println("最终支付金额： "+orderDetail.getPayMoney());
         }
+    }
+
+    private static void init(Order order) {
     }
 
 

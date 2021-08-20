@@ -12,5 +12,10 @@ public class SupportPromotions {
 
 
     public int getPromotionType() {
+        return 0;
+    }
+
+    public UserRedPacket getUserRedPacket() {
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package designpattern.decorator.productprice;
 import jdk.nashorn.internal.objects.annotations.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Order 主订单
@@ -18,7 +19,7 @@ public class Order {
     private int id; //订单ID
     private String orderNo; //订单号
     private BigDecimal totalPayMoney; //总支付金额
-    private List list; //详细订单列表
+    private List<OrderDetail> list; //详细订单列表
 
     public int getId() {
         return id;
@@ -44,11 +45,11 @@ public class Order {
         this.totalPayMoney = totalPayMoney;
     }
 
-    public List getList() {
+    public List<OrderDetail> getList() {
         return list;
     }
 
-    public void setList(List list) {
+    public void setList(List<OrderDetail> list) {
         this.list = list;
     }
 }

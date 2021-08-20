@@ -24,8 +24,8 @@ public class RedPacketDecorator extends BaseCountDecorator{
     }
 
     private BigDecimal countRedPacketPayMoney(OrderDetail orderDetail) {
-        BigDecimal redPacket = orderDetail.getMerchandise()
-                .getSupportPromotions().get(PromotionType.REDPACKED).getUserRedPacket().getRedPacket();
-
+//        BigDecimal redPacket = orderDetail.getMerchandise()
+//                .getSupportPromotions().get(PromotionType.REDPACKED).getUserRedPacket().getRedPacket();
+        return null;
     }
 }

@@ -8,8 +8,8 @@ package designpattern.decorator.productprice;
  * @date 2021/8/20
  */
 public class PromotionType implements Cloneable{
-    public static final int REDPACKED = "";
-    public static final int COUPON = "";
+    public static final int REDPACKED = 0;
+    public static final int COUPON = 1;
     private int id; // 该商品促销的 id
     private PromotionType promotionType; // 促销类型：1 优惠卷 2 红包
     private int priority; // 优先级

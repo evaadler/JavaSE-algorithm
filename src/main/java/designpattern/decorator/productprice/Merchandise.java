@@ -41,11 +41,11 @@ public class Merchandise {
         this.price = price;
     }
 
-    public Map getSupportPromotions() {
+    public Map<PromotionType, SupportPromotions> getSupportPromotions() {
         return supportPromotions;
     }
 
-    public void setSupportPromotions(Map supportPromotions) {
+    public void setSupportPromotions(Map<PromotionType, SupportPromotions> supportPromotions) {
         this.supportPromotions = supportPromotions;
     }
 }
