@@ -2,6 +2,7 @@ package base;
 
 /**
  * InitialOrder
+ * 类一加载：先走静态块，构造块，构造方法
  *
  * @author Alicia
  * @description
