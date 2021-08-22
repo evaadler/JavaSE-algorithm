@@ -1,7 +1,6 @@
 package java8;
 
 import org.junit.Test;
-import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;

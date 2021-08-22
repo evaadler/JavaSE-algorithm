@@ -28,3 +28,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/out/production/thread/Thread02.class
+/out/production/thread/Thread03$1.class
+/out/production/thread/Thread03.class
+/out/production/thread/ThreadTest.class
