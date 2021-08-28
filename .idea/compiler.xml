@@ -10,12 +10,16 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="Canada" target="1.7" />
-      <module name="JavaSE" target="1.7" />
+      <module name="Canada" target="8" />
+      <module name="JavaSE" target="8" />
       <module name="Static" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-source 7" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-source 8" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Canada" options="" />
+      <module name="JavaSE" options="" />
+    </option>
   </component>
 </project>

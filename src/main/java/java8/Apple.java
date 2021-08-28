@@ -15,6 +15,10 @@ public class Apple {
         this.width = width;
     }
 
+    public Apple() {
+
+    }
+
     public String getColor() {
         return color;
     }
