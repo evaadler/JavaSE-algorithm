@@ -42,9 +42,15 @@ public class LambdaExpression {
         Runnable r = ()->{};
 
         //一个入参，一个返回值；BiFunction：两个入参，一个返回值
-        Function<Apple, Boolean> f = (a) -> a.getColor().equals("green");
+        Function<Apple, Boolean> f = (a) -> "green".equals(a.getColor());
 
         //get: 拿到一个想要的东西
         Supplier<Apple> s = Apple::new;
+        Apple a2 = createApple(() -> new Apple("Green", 100));
+
+    }
+
+    private static Apple createApple(Supplier<Apple> supplier){
+        return supplier.get();
     }
 }
