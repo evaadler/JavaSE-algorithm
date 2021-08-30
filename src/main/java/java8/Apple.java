@@ -8,9 +8,9 @@ package java8;
  */
 public class Apple {
     private String color;
-    private int width;
+    private long width;
 
-    public Apple(String color, int width){
+    public Apple(String color, long width){
         this.color = color;
         this.width = width;
     }
@@ -27,11 +27,11 @@ public class Apple {
         this.color = color;
     }
 
-    public int getWidth() {
+    public long getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(long width) {
         this.width = width;
     }
 

@@ -1,8 +1,5 @@
 package cleancode.old.exception;
 
-import com.sun.media.jfxmedia.logging.Logger;
-import ningM.com.adobe.service.Deduplication;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 import java.awt.image.PixelGrabber;
