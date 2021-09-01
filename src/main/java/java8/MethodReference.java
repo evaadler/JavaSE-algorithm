@@ -1,8 +1,11 @@
 package java8;
 
+import com.sun.xml.internal.ws.policy.ComplexAssertion;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -61,6 +64,16 @@ public class MethodReference {
         BiFunction<String, Long, Apple> appleFunction = Apple::new;
         Apple apple = appleFunction.apply("red", 100L);
         System.out.println(apple);
+
+        //ThreeFunction<String, Long, String, ComplexApple> treeFunction = Complex::new;
+        //treeFunction.apply("Green",123L, "Fushi");
+
+        list.sort(Comparator.comparing(Apple::getColor));
+
+        String sss = null;
+        //Objects.requireNonNull(sss);
+        sss.getBytes();
+
     }
 
     private static <T> void useConsumer(Consumer<T> consumer, T t){
