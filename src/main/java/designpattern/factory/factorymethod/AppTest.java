@@ -24,19 +24,26 @@ public class AppTest {
 //        f.eat();
 
         FoodFactory ff = new HamburgerFactory();
-        Business.taste(ff);
+        Business.taste(new RiceNoodleFactory());
     }
 
 }
 
 class HamburgerFactory implements FoodFactory{
-
     @Override
     public Food getFood() {
         return new Hamburger();
     }
 }
 
+class RiceNoodleFactory implements FoodFactory{
+    @Override
+    public Food getFood() {
+        return new RichNoodle();
+    }
+}
+
+//業務裡面接的是工廠類型
 class Business{
     public static void taste(FoodFactory ff){
         Food f = ff.getFood();

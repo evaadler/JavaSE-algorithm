@@ -1,5 +1,7 @@
 package designpattern.pizzastore.order;
 
+import designpattern.pizzastore.pizza.OrderPizza;
+
 /**
  * PizzaStore
  *
