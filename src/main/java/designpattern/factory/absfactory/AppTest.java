@@ -6,39 +6,55 @@ package designpattern.factory.absfactory;
 
 public class AppTest {
     public static void main(String[] args) {
-        FoodFactory ff = new HamburgerFactory();
+        Factory ff = new HamburgerFactory();
         Business.taste(new RiceNoodleFactory());
     }
 }
 
-class HamburgerFactory implements FoodFactory{
+class HamburgerFactory implements Factory{
     @Override
     public Food getFood() {
         return new Hamburger();
     }
+
+    @Override
+    public Drink getDrink() {
+        return new Cola();
+    }
 }
 
-class RiceNoodleFactory implements FoodFactory{
+class RiceNoodleFactory implements Factory{
     @Override
     public Food getFood() {
         return new RichNoodle();
+    }
+
+    @Override
+    public Drink getDrink() {
+        return new IcePeak();
     }
 }
 
 //業務裡面接的是工廠類型
 class Business{
-    public static void taste(FoodFactory ff){
+    public static void taste(Factory ff){
         Food f = ff.getFood();
+        Drink d = ff.getDrink();
         System.out.println("评委1，品尝");
         f.eat();
+        d.drink();
 
         Food f2 = ff.getFood();
+        Drink d2 = ff.getDrink();
         System.out.println("评委2，品尝");
         f2.eat();
+        d2.drink();
 
         Food f3 = ff.getFood();
+        Drink d3 = ff.getDrink();
         System.out.println("评委3，品尝");
         f3.eat();
+        d3.drink();
 
     }
 }
@@ -56,12 +72,13 @@ interface Food{
 /**
  * 这个工厂也可以称之为接口：任何下层给上层暴露出来的方法都可以称之为接口
  */
-interface FoodFactory{
+interface Factory{
     /**
      * getFood
      * @return FOOD
      */
      Food getFood();
+     Drink getDrink();
 }
 
 interface Drink{
