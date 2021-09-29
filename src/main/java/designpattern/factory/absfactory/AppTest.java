@@ -7,7 +7,9 @@ package designpattern.factory.absfactory;
 public class AppTest {
     public static void main(String[] args) {
         Factory ff = new HamburgerFactory();
-        Business.taste(new RiceNoodleFactory());
+       // Business.taste(new RiceNoodleFactory());
+
+        Business.taste(new BaojiFactory());
     }
 }
 
@@ -129,5 +131,35 @@ class RichNoodle implements Food{
     @Override
     public void eat() {
         System.out.println("吃米线");
+    }
+}
+//==========扩展产品
+
+class Lp implements Food{
+
+    @Override
+    public void eat() {
+        System.out.println("宝鸡擀面皮");
+    }
+}
+class Fenda implements Drink{
+
+    @Override
+    public void drink() {
+        System.out.println("气泡芬达，爽");
+    }
+}
+
+//==========扩展工厂
+class BaojiFactory implements Factory{
+
+    @Override
+    public Food getFood() {
+        return new Lp();
+    }
+
+    @Override
+    public Drink getDrink() {
+        return new Fenda();
     }
 }
