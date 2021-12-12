@@ -1,4 +1,6 @@
-package java8;
+package java8.stream;
+
+import java8.Car;
 
 /**
  * Person

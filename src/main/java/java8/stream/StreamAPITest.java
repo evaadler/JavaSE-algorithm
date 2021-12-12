@@ -1,12 +1,9 @@
-package java8;
+package java8.stream;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-import javafx.scene.media.SubtitleTrack;
-import org.apache.logging.log4j.core.util.Integers;
+import java8.Employee;
+import java8.EmployeeData;
 import org.junit.Test;
 
-import javax.swing.*;
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
